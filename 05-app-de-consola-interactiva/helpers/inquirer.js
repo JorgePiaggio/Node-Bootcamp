@@ -60,5 +60,68 @@ const readInput = async( message ) => {
     return desc;
 }
 
+const listTasksToDelete = async( tasks = []) => {
 
-export { inquirerMenu, pause, readInput };
+    const choices = tasks.map( (task, i) => {
+
+        const idx = `${i + 1}`.green;
+
+        return{
+            value: task.id,
+            name: `${idx}.` + ` ${task.desc}`.toUpperCase()
+        }
+    });
+
+    choices.unshift({
+        value: 0,
+        name: '0.'.green + 'Cancel'.red
+    });
+
+    const question = [{
+        type: 'list',
+        name: 'id',
+        message: 'Delete: ',
+        choices
+    }]
+
+    const{ id } = await inquirer.prompt(question);
+    return id;
+}
+
+const listTasksToCheck = async( tasks = []) => {
+
+    const choices = tasks.map( (task, i) => {
+
+        const idx = `${i + 1}`.green;
+
+        return{
+            value: task.id,
+            name: `${idx}.` + ` ${task.desc}`.toUpperCase(),
+            checked: task.completedIn ? true : false
+        }
+    });
+
+    const question = [{
+        type: 'checkbox',
+        name: 'ids',
+        message: 'Select: ',
+        choices
+    }]
+
+    const{ ids } = await inquirer.prompt(question);
+    return ids;
+}
+
+const confirm = async (message) => {
+    const question = [{
+        type: 'confirm',
+        name: 'ok',
+        message
+    }];
+
+    const{ ok } = await inquirer.prompt(question);
+    return ok;
+}
+
+
+export { inquirerMenu, pause, readInput, listTasksToDelete, confirm, listTasksToCheck }
