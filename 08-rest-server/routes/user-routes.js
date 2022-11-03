@@ -7,7 +7,7 @@ export const router = Router();
 router.get('/', userGet);
 
 // PUT
-router.put('/', userPut);
+router.put('/:id', userPut);
 
 // POST
 router.post('/', userPost);
