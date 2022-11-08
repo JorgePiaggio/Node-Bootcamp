@@ -1,3 +1,4 @@
 04-bases-de-node/output/*.txt
 node_modules/
 *.pptx
+08-rest-server/.env
