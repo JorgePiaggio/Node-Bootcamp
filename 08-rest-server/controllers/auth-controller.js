@@ -1,7 +1,8 @@
-import { request, response } from 'express';
+import { json, request, response } from 'express';
 import User from '../models/user.js';
 import bcrypt from "bcryptjs";
 import { generateJWT } from '../helpers/jwt.js'
+import { googleVerify } from '../helpers/google-verify.js';
 
 const login = async (req = request, res = response) => {
 
@@ -50,7 +51,28 @@ const login = async (req = request, res = response) => {
 
 }
 
+const googleSignIn = async (req = request, res = response) => {
+    const { id_token } = req.body;
+
+    try {
+        
+        const { name, picture, email } = await googleVerify(id_token);
+
+        res.json({
+            msg: 'Google sign in Success',
+            id_token
+        })
+    } catch (error) {
+        res.status(400).json({
+            ok: false,
+            msg: 'Unable to verify token'
+        })
+    }
+
+}
+
 
 export {
-    login
+    login,
+    googleSignIn
 }
