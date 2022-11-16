@@ -1,7 +1,7 @@
 import { request, response } from "express"
 
 
-const isAdmin = (req = request, res = response) => {
+const isAdmin = (req = request, res = response, next) => {
     
     if(!req.user){
         return res.status(500).json({

@@ -1,3 +1,4 @@
+import Category from '../models/category.js';
 import Role from '../models/role.js'
 import User from '../models/user.js';
 
@@ -24,8 +25,17 @@ const userByIdExists = async( id ) => {
     }
 }
 
+const categoryByIdExists = async( id ) => {
+    const exists = await Category.findById(id);
+
+    if( !exists ){
+        throw new Error(`Id ${id} does not exist in Database`);
+    }
+}
+
 export {
     isRoleValid,
     emailExists,
-    userByIdExists
+    userByIdExists,
+    categoryByIdExists
 }
