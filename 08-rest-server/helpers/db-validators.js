@@ -33,9 +33,19 @@ const categoryByIdExists = async( id ) => {
     }
 }
 
+const productByIdExists = async( id ) => {
+    const exists = await Product.findById(id);
+
+    if( !exists ){
+        throw new Error(`Id ${id} does not exist in Database`);
+    }
+}
+
+
 export {
     isRoleValid,
     emailExists,
     userByIdExists,
-    categoryByIdExists
+    categoryByIdExists,
+    productByIdExists
 }
