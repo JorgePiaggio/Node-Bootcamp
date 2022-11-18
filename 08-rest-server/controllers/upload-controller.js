@@ -1,32 +1,72 @@
 import { response } from "express";
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { uploadFileHelper } from '../helpers/file-upload.js'
+import User from '../models/user.js'
+import Product from '../models/product.js'
 
-const uploadFile = (req, res = response) => {
+const uploadFile = async (req, res = response) => {
+    
+    try {
+        const filePath = await uploadFileHelper(req.files, undefined, 'img');
+        //const filePath = await uploadFileHelper(req.files, ['txt', 'md'], 'text');
+            
+        res.json({
+            path: filePath
+        });
 
-    if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
-        res.status(400).send('No files were uploaded.');
-        return;
+    } catch (error) {
+        res.status(400).json({error});
     }
 
-    const { file } = req.files;
+}
 
-    const uploadPath = path.join(__dirname, '../uploads/', file.name);
+const updateImage = async (req, res = response ) => {
 
-    file.mv(uploadPath, function(err) {
-        if (err) {
-            return res.status(500).json({err});
-        }
+    const { id, collection } = req.params;
 
-        res.json({msg: 'File uploaded to ' + uploadPath });
-    });
+    let model;
+
+    switch(collection){
+        case 'users':
+            model = await User.findById(id);
+            if(!model){
+                return res.status(400).json({
+                    msg: `User with id ${id} does not exist`
+                });
+            }
+        break;
+        case 'products':
+            model = await Product.findById(id);
+            if(!model){
+                return res.status(400).json({
+                    msg: `Product with id ${id} does not exist`
+                });
+            }
+            break;
+        default:
+            return res.status(500).json({msg: 'Error, please contact support'})
+    }
+
+    try {
+        const name = await uploadFileHelper(req.files, undefined, collection);
+        model.image = name;
+        await model.save();
+    } catch (error) {        
+        // check why saves img but returns error
+        model.image = error;
+        await model.save();
+    } finally {
+        res.json(model);
+    }
+
 }
 
 
 
 
 
+
+
 export {
-    uploadFile
+    uploadFile,
+    updateImage
 }

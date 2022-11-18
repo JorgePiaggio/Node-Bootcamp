@@ -41,11 +41,21 @@ const productByIdExists = async( id ) => {
     }
 }
 
+const allowedCollections = (collection = '', collectionsAllowed = []) => {
+    const included = collectionsAllowed.includes(collection);
+
+    if(!included){
+        throw new Error(`${collection} is not allowed. Allowed: ${collectionsAllowed}`);
+    }
+
+    return true;
+}
 
 export {
     isRoleValid,
     emailExists,
     userByIdExists,
     categoryByIdExists,
-    productByIdExists
+    productByIdExists,
+    allowedCollections
 }
