@@ -2,3 +2,6 @@
 node_modules/
 *.pptx
 08-rest-server/.env
+08-rest-server/uploads/products/**.*
+08-rest-server/uploads/users/**.*
+08-rest-server/.gitignore

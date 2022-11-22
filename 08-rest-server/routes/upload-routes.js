@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { uploadFile, updateImage } from '../controllers/upload-controller.js';
+import { uploadFile, updateImage, showImage, updateImageCloudinary } from '../controllers/upload-controller.js';
 import  { validate, validateFile } from '../middlewares/index.js'
 import { allowedCollections } from '../helpers/db-validators.js';
 
@@ -13,4 +13,11 @@ routerUpload.put('/:collection/:id', [
     check('id', 'Invalid Id').isMongoId(),
     check('collection').custom( c => allowedCollections( c, ['users', 'products'])),
     validate
-], updateImage);
+], updateImageCloudinary);
+
+
+routerUpload.get('/:collection/:id', [
+    check('id', 'Invalid Id').isMongoId(),
+    check('collection').custom( c => allowedCollections( c, ['users', 'products'])),
+    validate
+], showImage);
