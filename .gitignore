@@ -5,3 +5,5 @@ node_modules/
 08-rest-server/uploads/products/**.*
 08-rest-server/uploads/users/**.*
 08-rest-server/.gitignore
+09-typescript-rest-server/.env
+09-typescript-rest-server/dist
